@@ -22,3 +22,5 @@ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpasswo
 docker run --name redis-name -d -p 6379:6379 redis
 docker-compose up -d
 docker-compose down
+Для запуску документації
+.\make.bat html

@@ -8,7 +8,7 @@ import os
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.join(os.getcwd(), ".."))
 project = 'Module_Web_14_MHW'
 copyright = '2024, Olexander Zhukov'
 author = 'Olexander Zhukov'

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from src.schemas.schemas import ContactModel
-from src.database.models import Contact,User    
+from src.database.models import Contact, User    
 
 # Список контактів
 async def get_contacts(skip: int, limit: int, user: User, db: Session) -> list[Contact]:
@@ -15,7 +15,7 @@ async def get_contacts(skip: int, limit: int, user: User, db: Session) -> list[C
     :param limit: int: Limit the number of contacts returned
     :param offset: int: Specify the number of records to skip
     :param db: Session: Pass in the database connection to the function
-    :param current_user: User: Filter the contacts by user
+    :param user: User: Filter the contacts by user
     :return: A list of contact
     :doc-author: Trelent
     """
@@ -104,22 +104,19 @@ async def remove_contact(contact_id: int, user: User, db: Session) -> Contact | 
 
 # Пошук контакту за ім'ям
 async def find_contact_by_first_name(first_name: str, user: User, db: Session) -> list[Contact]:
-
     """
     Search contacts by first name.
-
     :param first_name: str: First name to search for.
     :param user: User: User object to filter contacts.
     :param db: Session: Database session object.
-    :return: list[Contact]: List of contacts matching the first name.
+    :return: List[Contact]: List of contacts matching the first name.
     :raises: HTTPException: If no contacts are found matching the first name.
     """
-
-    contact = db.query(Contact).filter(and_(Contact.first_name == first_name, Contact.user_id == user.id)).all()
-    if not contact:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
+    contacts = db.query(Contact).filter(and_(Contact.first_name == first_name, Contact.user_id == user.id)).all()
+    if not contacts:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contacts not found")
     else:
-        return contact
+        return contacts
 
 # Пошук контакту за прізвищем
 async def find_contact_by_last_name(contact_last_name: str, user: User, db: Session) -> list[Contact]:
@@ -153,7 +150,7 @@ async def find_contact_by_email(contact_email: str, user: User, db: Session) -> 
     :raises: HTTPException: If no contacts are found matching the email address.
     """
 
-    contact = db.query(Contact).filter(and_(Contact.email == contact_email, Contact.user_id == user.id)).all()
+    contact = db.query(Contact).filter(and_(Contact.email == contact_email, Contact.user_id == user.id)).first()
     if not contact:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     else:

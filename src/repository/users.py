@@ -17,17 +17,6 @@ async def get_user_by_email(email: str, db: Session) -> User:
 
     return db.query(User).filter(User.email == email).first()
 
-async def get_user_by_username(username: str, db: Session) -> User:
-
-    """
-    Retrieve a user by username.
-
-    :param username: str: Username of the user to retrieve.
-    :param db: Session: Database session object.
-    :return: User: Retrieved user object.
-    """
-
-    return db.query(User).filter(User.username == username).first()
 
 # Створюємо нового 
 async def create_user(body: UserModel, db: Session) -> User:

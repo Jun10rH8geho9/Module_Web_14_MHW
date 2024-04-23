@@ -37,7 +37,7 @@ async def signup(body: UserModel, background_tasks: BackgroundTasks, request: Re
     return {"user": new_user, "detail": "User successfully created. Check your email for confirmation."}
 
 
-@router.post("/login", response_model=TokenModel, status_code=status.HTTP_201_CREATED)
+@router.post("/login", response_model=TokenModel, status_code=status.HTTP_200_OK)
 async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     """
@@ -49,7 +49,7 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     :raises: HTTPException: If provided credentials are invalid or email is not confirmed.
     """
 
-    user = await repository_users.get_user_by_username(body.username, db)
+    user = await repository_users.get_user_by_email(body.username, db)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email")
     if not user.confirmed:
@@ -116,7 +116,7 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
     :return: dict: Confirmation message.
     """
 
-    user = await repository_users.get_user_by_username(body.email, db)
+    user = await repository_users.get_user_by_email(body.email, db)
 
     if user is not None and user.confirmed:
         return {"message": "Your email is already confirmed"}

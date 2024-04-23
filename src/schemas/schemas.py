@@ -37,7 +37,7 @@ class ContactResponse(ContactModel):
     user: UserResponse | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PasswordResetRequest(BaseModel):
     email: str

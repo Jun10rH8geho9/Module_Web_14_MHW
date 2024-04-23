@@ -1,3 +1,4 @@
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from middlewares import CustomHeaderMiddleware
@@ -22,9 +23,9 @@ app.add_middleware(CustomHeaderMiddleware)
 # app.add_middleware(UserAgentBanMiddleware)
 # app.add_middleware(WhiteListMiddleware)
 
+BASE_DIR = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=BASE_DIR / "src" / "static"), name="static")
 
-
-# app.mount("/static", StaticFiles(directory='src/static'), name="static")
 
 @app.on_event("startup")
 async def startup():
